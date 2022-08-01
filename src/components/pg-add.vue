@@ -41,7 +41,8 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import { getListNewComponents, dataPg } from "../utils/constants.utils";
+import { getListNewComponents, dataPg, ACTUAL_CONTAINER, searchIndexAndPushComp, PgPage } from "../utils/constants.utils";
+import { deleteItem, getItem } from "@/utils/local-storage.utils";
 
 export default defineComponent({
   setup() {
@@ -70,13 +71,18 @@ export default defineComponent({
           propsCreate[item] = modelProps.value[index];
         }
       });
-      dataPg.push({
-        id: dataPg.length,
+
+      
+      const newComp: PgPage = {
+        id: `${componentSelected.value.named}`,
         componentName: componentSelected.value.named,
-        props: propsCreate
-      });
+        props: propsCreate,
+        children: []
+      }
+      searchIndexAndPushComp(newComp);
       modelProps.value = [];
       showComponentProps.value = false;
+      deleteItem(ACTUAL_CONTAINER);
     };
 
     return {

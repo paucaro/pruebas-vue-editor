@@ -1,5 +1,7 @@
 import { reactive } from "vue";
+import { getItem } from "./local-storage.utils";
 
+export const ACTUAL_CONTAINER = 'actual-container';
 export const dataPg = reactive<PgPage[]>([]);
 
 export const getComponents = () => {
@@ -11,6 +13,34 @@ export const getComponents = () => {
   return illustrations
     .keys()
     .map((file: string) => file.replace("./", "").replace(".vue", ""));
+};
+
+export const searchIndexAndPushComp = (newElement: PgPage) => {
+  const listTemp = getItem(ACTUAL_CONTAINER).split(':');
+  let j = 1;
+  let idsLevel = [];
+  for (let index = 1; index <= listTemp.length; index++) {
+    idsLevel.push(listTemp.slice(0, index).join(':'))
+  }
+
+  let tempItem: PgPage = new PgPage();
+  let tempChildren = dataPg;
+
+  if (!!getItem(ACTUAL_CONTAINER)) {
+    idsLevel.forEach((val: string) => {
+      tempItem = tempChildren.find(i => i.id == val)!;
+      tempChildren = tempItem.children?.length === 0 ? [] : tempItem.children!;
+    });
+  }
+
+  const idNewComp = (!!getItem(ACTUAL_CONTAINER)) ? `${getItem(ACTUAL_CONTAINER)}:`: '';
+  newElement.id = `${idNewComp}${tempChildren.length}_${newElement.id}`;
+  if (!!idNewComp) {
+    tempItem.children?.push(newElement);
+  } else {
+    dataPg.push(newElement);
+  }
+
 };
 
 export const getListNewComponents = (): Array<NewComponent> => {
@@ -65,7 +95,7 @@ export class NewComponent {
 }
 
 export class PgPage {
-  id: number = 0;
+  id: string = '';
   componentName: string = '';
   children?: PgPage[] = [];
   props?: {

@@ -13,11 +13,9 @@
 
 <script lang="ts">
 import {ref} from 'vue';
-import PgAdd from '../components/pg-add.vue';
 import PgPage from '../components/pg-page.vue';
 export default {
   components: {
-    PgAdd,
     PgPage,
   },
   setup() {
