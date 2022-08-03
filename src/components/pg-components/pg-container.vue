@@ -1,5 +1,4 @@
 <template>
-  <div>
     <div
       class="pg-container"
       :class="{
@@ -10,39 +9,39 @@
       }"
       :style="{
         padding: padding,
+        margin: margin,
         'grid-template-columns': columnsSize,
         background: color,
       }"
-      @click.stop="getActions"
+      @click.stop="getActions(item.id)"
     >
       <template v-for="element in item.children" :key="element">
         <component
           :is="getComponentPgName(element.componentName)"
           :item="element"
           v-bind="element.props"
+          @click.stop="getActions(element.id)"
         />
       </template>
     </div>
-    <pg-actions v-if="showActions"/>
-  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType, ref } from "vue";
-import PgActions from "../pg-actions.vue";
 import {
   ACTUAL_CONTAINER,
   getComponentPgName,
   PgPage,
 } from "../../utils/constants.utils";
-import { saveItem } from "../../utils/local-storage.utils";
+import PgImage from "./pg-image.vue";
+import { getItem, saveItem } from "../../utils/local-storage.utils";
 
 type PositionType = "center" | "rigth" | "left";
 
 export default defineComponent({
   name: "PgContainer",
   components: {
-    PgActions
+    PgImage,
   },
   props: {
     item: {
@@ -51,11 +50,12 @@ export default defineComponent({
     },
     full: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     row: Boolean,
     color: String,
     padding: String,
+    margin: String,
     position: {
       type: String as PropType<PositionType>,
       default: "left",
@@ -64,15 +64,12 @@ export default defineComponent({
   },
   setup(props) {
     const enabled = ref(false);
-    const showActions = ref(false);
-    const getActions = () => {
-      saveItem(ACTUAL_CONTAINER, props.item.id);
-      showActions.value = !showActions.value;
+    const getActions = (id: string) => {
+      ACTUAL_CONTAINER.value = id;
     };
     return {
       getComponentPgName,
       enabled,
-      showActions,
       getActions,
     };
   },
@@ -82,7 +79,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 .pg-container {
   min-height: 40px;
-  padding: 4px;
   cursor: pointer;
 
   &:hover {

@@ -3,17 +3,15 @@
     <template v-for="item in dataPg" :key="item.id">
       <pg-container :item="item" v-bind="item.props" />
     </template>
-    <pg-actions @click="actionsGeneralClickec"/>
-    {{dataPg}}
   </div>
+    
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import PgContainer from "./pg-components/pg-container.vue";
-import { ACTUAL_CONTAINER, dataPg } from "@/utils/constants.utils";
+import { dataPg } from "@/utils/constants.utils";
 import PgActions from "./pg-actions.vue";
-import { deleteItem } from "@/utils/local-storage.utils";
 
 export default defineComponent({
   components: {
@@ -21,12 +19,8 @@ export default defineComponent({
     PgActions,
   },
   setup() {
-    const actionsGeneralClickec = () => {
-      deleteItem(ACTUAL_CONTAINER);
-    }
     return {
         dataPg,
-        actionsGeneralClickec,
     }
   }
 });

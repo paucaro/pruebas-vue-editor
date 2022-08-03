@@ -1,15 +1,24 @@
 <template>
   <div class="pg-delete">
-    <div class="button-delete">
+    <div class="button-delete" @click="deleteComponent">
         - Delete
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import { searchIndexAndDeleteComp } from "@/utils/constants.utils";
 import { defineComponent } from "@vue/runtime-core";
 
 export default defineComponent({
+  setup() {
+    const deleteComponent = () => {
+      searchIndexAndDeleteComp();
+    }
+    return {
+      deleteComponent,
+    }
+  }
 });
 </script>
 

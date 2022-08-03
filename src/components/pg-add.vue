@@ -42,7 +42,6 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { getListNewComponents, dataPg, ACTUAL_CONTAINER, searchIndexAndPushComp, PgPage } from "../utils/constants.utils";
-import { deleteItem, getItem } from "@/utils/local-storage.utils";
 
 export default defineComponent({
   setup() {
@@ -82,7 +81,7 @@ export default defineComponent({
       searchIndexAndPushComp(newComp);
       modelProps.value = [];
       showComponentProps.value = false;
-      deleteItem(ACTUAL_CONTAINER);
+      ACTUAL_CONTAINER.value = '';
     };
 
     return {
